@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import * as React from 'react';
+
+const todoList = [
+  {
+  title: 'Win a lottery',
+  id: 1,
+  },
+  {
+  title: 'Put the lottery win into a bank account',
+  id: 2,
+  },
+  {
+    title: 'Donate money to the charity (dog shelters)',
+    id: 3,
+  },
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+return (
+<div>
+<h1>Todo List</h1>
 
+ <label htmlFor="search">Search: </label>
+<input id="search" type="text" />
+<ul>
+  {todoList.map(function (item) {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  <li key={item.id}>
+  <span>
+  <a href={item.url}>{item.title}</a>
+  </span>
+  </li>
+);
+})}
+</ul>
+</div>
+);
 }
-
-export default App
+export default App;
