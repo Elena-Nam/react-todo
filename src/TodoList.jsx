@@ -22,7 +22,7 @@ return (
         <a href={item.url}>{item.title}</a>
         </span>
         </li>
-    ))};
+    ))}
     </ul>
 );
 }
