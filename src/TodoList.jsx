@@ -1,3 +1,6 @@
+import TodoListItem from "./TodoListItem";
+
+
 const todoList = [
     {
     title: 'Win a lottery',
@@ -12,18 +15,25 @@ const todoList = [
       id: 3,
     },
   ];
-  
-function TodoList() {
-return (
-    <ul>
-    {todoList.map((item) => (
-        <li key={item.id}>
-        <span>
-        <a href={item.url}>{item.title}</a>
-        </span>
-        </li>
-    ))}
-    </ul>
-);
-}
+  /*
+  function TodoList(props) {
+    return (
+      <ul>
+        {props.todoList.map((todo) => (
+          <TodoListItem key={todo.id} todo={todo}/>
+        ))}
+      </ul>
+    );
+  }
+*/
+
+  function TodoList() {
+    return (
+        <ul>
+        {todoList.map((item) => (
+           <TodoListItem key={item.id} todo={item} />
+        ))}
+        </ul>
+    );
+    }
 export default TodoList;
