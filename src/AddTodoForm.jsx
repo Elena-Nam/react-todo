@@ -6,7 +6,6 @@ function AddTodoForm (props) {
     function handleAddTodo(event){
         event.preventDefault();// Prevent the form from reloading the page
         const todoTitle = event.target.title.value;
-        console.log(todoTitle); // Log the current title value
         props.onAddTodo(todoTitle);// Call the onAddTodo function passed as a prop
         setTitle(''); // Clear the input field after adding the todo
     }
