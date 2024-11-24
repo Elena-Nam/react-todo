@@ -2,7 +2,7 @@ import * as React from 'react';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
-
+/*
 const todoList = [
   {
     title: 'Win a lottery',
@@ -17,17 +17,20 @@ const todoList = [
     id: 3,
   },
 ];
+*/
 
 function App() {
-  
-const [newTodo, setNewTodo] = React.useState('');
-  
+
+const [todoList, setTodoList] = React.useState([]);
+function AddTodo (newTodo) {
+  setTodoList ((prevTodoList) => [...prevTodoList, newTodo])
+}
+
 return (
   <div>
   <h1> Todo List </h1>
-  <TodoList  todoList = {todoList}/>
-  <AddTodoForm onAddTodo = {setNewTodo} />
-  <p> the value of {newTodo} </p>
+  <TodoList  todoList = {todoList} />
+  <AddTodoForm onAddTodo = {AddTodo} />
   </div>
   );
   }
