@@ -2,36 +2,36 @@ import * as React from 'react';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
 
-/*
-const todoList = [
-  {
-    title: 'Win a lottery',
-    id: 1,
-  },
-  {
-    title: 'Put the lottery win into a bank account',
-    id: 2,
-  },
-  {
-    title: 'Donate money to the charity (dog shelters)',
-    id: 3,
-  },
-];
-*/
+const useSemiPersistentState = () => {
 
-function App() {
+  // Retrieve the saved todo list from localStorage or default to an empty array
+  const savedTodoList = JSON.parse (localStorage.getItem ('savedTodoList')) || [];
 
-const [todoList, setTodoList] = React.useState([]);
+  const [todoList, setTodoList] = React.useState(savedTodoList);
+
+  // Save the todo list to localStorage whenever it changes
+  React.useEffect(() => {
+    localStorage.setItem('savedTodoList', JSON.stringify(todoList));
+    }, [todoList]);
+
+  return [todoList, setTodoList]; 
+}
+
+
+function App () {
+
+const [todoList, setTodoList] = useSemiPersistentState();
+
 function AddTodo (newTodo) {
   setTodoList ((prevTodoList) => [...prevTodoList, newTodo])
 }
 
 return (
-  <div>
+  <>
   <h1> Todo List </h1>
   <TodoList  todoList = {todoList} />
   <AddTodoForm onAddTodo = {AddTodo} />
-  </div>
+  </>
   );
   }
   
