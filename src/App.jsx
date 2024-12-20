@@ -26,10 +26,16 @@ function AddTodo (newTodo) {
   setTodoList ((prevTodoList) => [...prevTodoList, newTodo])
 }
 
+const removeTodo = (id) => {
+  const newTodoList = todoList.filter(
+    (todo) => todo.id !== id);
+    setTodoList(newTodoList);
+}
+
 return (
   <>
   <h1> Todo List </h1>
-  <TodoList  todoList = {todoList} />
+  <TodoList  todoList = {todoList} onRemoveTodo = {removeTodo} /> {/* Pass removeTodo as prop */}
   <AddTodoForm onAddTodo = {AddTodo} />
   </>
   );
