@@ -11,6 +11,50 @@ function App () {
   const [todoList, setTodoList] = React.useState (savedTodoList); // in the assignment "Update the default state for todoList to be an empty Array" ???
   const [isLoading, setIsLoading] = React.useState (true);
 
+
+  const fetchData = async() => {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+        },
+      };
+
+    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+
+    try {
+      const response = await fetch(url,options);
+
+       if (!response.ok) {
+         const message = `Error: ${response.status}`;
+         throw new Error(message);
+       }
+
+       const data = await response.json();
+       console.log(data);
+
+       const todos = data.records.map((todo) => {
+          const newTodo =  {
+              id: todo.id,
+              title: todo.fields.title
+          }
+          return newTodo;
+      });
+
+         setTodoList(todos);
+         setIsLoading (false);
+
+      } catch (error) {
+        console.error('Error fetching data:', error.message); 
+      }
+  }
+
+React.useEffect (()=>{
+  fetchData();
+},[]);
+
+/*
    // Simulate fetching data
   React.useEffect (() => {
   new Promise ((resolve , reject) => {
@@ -28,7 +72,7 @@ function App () {
       setIsLoading(false); // Make sure to set loading to false even on error
     });
   },[]);
-
+*/
   // Save the todo list to localStorage whenever it changes and is loading is false
   React.useEffect (() => {
     if (!isLoading) {
@@ -59,5 +103,5 @@ return (
   </>
   );
   }
-  
+
 export default App;
