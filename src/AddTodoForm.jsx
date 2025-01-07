@@ -10,7 +10,7 @@ function AddTodoForm ({onAddTodo}) {
 	    setTodoTitle (newTodoTitle);
     }
 
-    // Handle adding a new todo with fetching url of the airtable
+    /* Handle fetching url of the airtable to add a new todo */
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}` 
     
   async function handleAddTodo(event) {
@@ -52,22 +52,7 @@ function AddTodoForm ({onAddTodo}) {
       console.error('Error adding todo:', error);
     }
   }
-	   
-     
-/*
-    function handleAddTodo(event) {
-	  event.preventDefault();// Prevent the form from reloading the page
-	
-	  const newTodo = {
-		title: todoTitle, // Pass the title from the state
-		id: Date.now(), // Generate a unique ID using Date.now()
-	    };
-
-	  onAddTodo(newTodo); // Call the onAddTodo function passed as a prop
-	  setTodoTitle(''); // Clear the input field after adding the todo
-	  */
-    
-	  
+	 
 return (
     <form onSubmit = {handleAddTodo}>
 	  <InputWithLabel 
