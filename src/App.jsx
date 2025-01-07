@@ -11,7 +11,6 @@ function App () {
   const [todoList, setTodoList] = React.useState (savedTodoList); // in the assignment "Update the default state for todoList to be an empty Array" ???
   const [isLoading, setIsLoading] = React.useState (true);
 
-
   const fetchData = async() => {
       const options = {
         method: "GET",
@@ -21,7 +20,7 @@ function App () {
         },
       };
 
-    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
 
     try {
       const response = await fetch(url,options);
@@ -54,6 +53,8 @@ React.useEffect (()=>{
   fetchData();
 },[]);
 
+
+
 /*
    // Simulate fetching data
   React.useEffect (() => {
@@ -73,6 +74,8 @@ React.useEffect (()=>{
     });
   },[]);
 */
+
+
   // Save the todo list to localStorage whenever it changes and is loading is false
   React.useEffect (() => {
     if (!isLoading) {
@@ -99,7 +102,7 @@ return (
   <TodoList  todoList = {todoList} onRemoveTodo = {removeTodo} /> 
   )}
   
-  <AddTodoForm onAddTodo = {AddTodo} />
+  <AddTodoForm onAddTodo = {AddTodo}/>
   </>
   );
   }
