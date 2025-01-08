@@ -8,26 +8,51 @@ function App () {
   const savedTodoList = JSON.parse (localStorage.getItem ('savedTodoList')) || [];
 
    // Initialize state with the saved data from localStorage
-  const [todoList, setTodoList] = React.useState (savedTodoList); // in the assignment "Update the default state for todoList to be an empty Array" ???
+  const [todoList, setTodoList] = React.useState ([]); // in the assignment "Update the default state for todoList to be an empty Array" ???
   const [isLoading, setIsLoading] = React.useState (true);
 
-   // Simulate fetching data
-  React.useEffect (() => {
-  new Promise ((resolve , reject) => {
-    setTimeout (() => {
-      resolve ({ data: { todoList: [] }}); // Simulate an empty todo list for now
-      }, 2000);
-    })
-    .then ((result) => {
-      setTodoList (result.data.todoList);
-      setIsLoading (false);
-    })
-    // optional not in the assignment of this week
-    .catch((error) => {
-      console.error('Error fetching data:', error); // Handle errors
-      setIsLoading(false); // Make sure to set loading to false even on error
-    });
-  },[]);
+
+   /* Handle fetching url of the airtable to retrieve data */
+  const fetchData = async() => {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+        },
+      };
+
+  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+
+    try {
+      const response = await fetch(url,options);
+
+       if (!response.ok) {
+         const message = `Error: ${response.status}`;
+         throw new Error(message);
+       }
+
+       const data = await response.json();
+       
+       const todos = data.records.map((todo) => {
+          const newTodo =  {
+              id: todo.id,
+              title: todo.fields.title
+          }
+          return newTodo;
+      });
+
+         setTodoList(todos);
+         setIsLoading (false);
+
+      } catch (error) {
+        console.error('Error fetching data:', error.message); 
+      }
+  }
+
+React.useEffect (()=>{
+  fetchData();
+},[]);
 
   // Save the todo list to localStorage whenever it changes and is loading is false
   React.useEffect (() => {
@@ -40,10 +65,42 @@ function AddTodo (newTodo) {
   setTodoList ((prevTodoList) => [...prevTodoList, newTodo])
 }
 
-const removeTodo = (id) => {
-  const newTodoList = todoList.filter (
-    (todo) => todo.id !== id);
+
+/* Handle fetching url of the airtable to delete the data */
+const removeTodo = async (id) => {
+
+ 
+  const removedId = id;
+  
+  const removeUrl = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}/${removedId}`;
+  
+  const options = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+      }
+    }
+
+  try {
+    const response = await fetch (removeUrl, options); 
+   
+    if (!response.ok) {
+      const message = `Error: ${response.status}`;
+      throw new Error(message);
+    } 
+
+    const data = await response.json();
+    
+     // Update the todo list by filtering out the removed todo
+    const newTodoList = todoList.filter (
+      (todo) => todo.id !== data.id);
+
     setTodoList (newTodoList);
+
+  } catch (error) {
+  console.error('Error removing todo:', error);
+  }
 }
 
 return (
@@ -55,9 +112,9 @@ return (
   <TodoList  todoList = {todoList} onRemoveTodo = {removeTodo} /> 
   )}
   
-  <AddTodoForm onAddTodo = {AddTodo} />
+  <AddTodoForm onAddTodo = {AddTodo}/>
   </>
   );
   }
-  
+
 export default App;
