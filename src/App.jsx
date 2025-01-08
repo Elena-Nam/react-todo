@@ -33,8 +33,7 @@ function App () {
        }
 
        const data = await response.json();
-       console.log(data);
-
+       
        const todos = data.records.map((todo) => {
           const newTodo =  {
               id: todo.id,
@@ -72,8 +71,7 @@ const removeTodo = async (id) => {
 
  
   const removedId = id;
-  console.log('RemovedID:', removedId);
-
+  
   const removeUrl = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}/${removedId}`;
   
   const options = {
@@ -93,13 +91,11 @@ const removeTodo = async (id) => {
     } 
 
     const data = await response.json();
-    console.log ('The item deleted:', data);
-
+    
      // Update the todo list by filtering out the removed todo
     const newTodoList = todoList.filter (
       (todo) => todo.id !== data.id);
 
-    console.log(newTodoList);
     setTodoList (newTodoList);
 
   } catch (error) {

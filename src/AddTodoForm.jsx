@@ -15,8 +15,7 @@ function AddTodoForm ({onAddTodo}) {
     
   async function handleAddTodo(event) {
 	  event.preventDefault(); // Prevent the form from reloading the page
-	  console.log(event);
-
+	
 	  const newTodo = {
       fields: {
       title: todoTitle, // Pass the title from the state
@@ -36,7 +35,6 @@ function AddTodoForm ({onAddTodo}) {
           throw new Error(message);
         }
       const data = await response.json();
-          console.log ('New item added:', data);
 
       // Add the new todo to the parent component
       const addedNewTodo = {
