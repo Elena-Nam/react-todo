@@ -1,6 +1,7 @@
 import * as React from 'react';
 import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 function App () {
 
@@ -103,18 +104,35 @@ const removeTodo = async (id) => {
   }
 }
 
-return (
-  <>
-  <h1> Todo List </h1>
-  {isLoading ? (
-    <p> Loading... </p>
-  ) : (
-  <TodoList  todoList = {todoList} onRemoveTodo = {removeTodo} /> 
-  )}
-  
-  <AddTodoForm onAddTodo = {AddTodo}/>
+
+const Home = () => {
+  return (
+    <>
+      <h1> Todo List </h1>
+      {isLoading ? (
+        <p> Loading... </p>
+        ) : (
+        <TodoList  todoList = {todoList} onRemoveTodo = {removeTodo} /> 
+        )}
+      <AddTodoForm onAddTodo = {AddTodo}/>
   </>
-  );
-  }
+  )
+}
+
+
+return (
+  <BrowserRouter>
+    <nav> 
+      <Link to="/"> HOME </Link>
+      <Link to="/new"> NEW </Link>
+    </nav>
+    <Routes>
+      <Route path = "/" element = { <Home/> }/>
+      <Route path = "/new" element = { <h1> New Todo List</h1> } />
+    </Routes>
+  </BrowserRouter>
+);
+
+}
 
 export default App;
