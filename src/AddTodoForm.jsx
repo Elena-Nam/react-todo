@@ -4,8 +4,9 @@ import InputWithLabel from './InputWithLabel';
 
 function AddTodoForm ({onAddTodo}) {
   const [todoTitle, setTodoTitle] = useState ('');
-
-    function handleTitleChange(e) {
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for handling the button disable/enable
+    
+  function handleTitleChange(e) {
 	    const newTodoTitle = e.target.value;
 	    setTodoTitle (newTodoTitle);
     }
@@ -15,7 +16,8 @@ function AddTodoForm ({onAddTodo}) {
     
   async function handleAddTodo(event) {
 	  event.preventDefault(); // Prevent the form from reloading the page
-	
+    setIsSubmitting(true); // Disable the submit button
+
 	  const newTodo = {
       fields: {
       title: todoTitle, // Pass the title from the state
@@ -48,7 +50,10 @@ function AddTodoForm ({onAddTodo}) {
 	  
     } catch (error) {
       console.error('Error adding todo:', error);
+    } finally {
+      setIsSubmitting(false); // Re-enable the submit button after the request completes
     }
+    
   }
 	 
 return (
@@ -58,7 +63,9 @@ return (
 		handleTitleChange={handleTitleChange}> Title
 	  </InputWithLabel>
     
-    <button type = "submit"> Submit </button>
+    <button type="submit" disabled={isSubmitting}> 
+        {isSubmitting ? 'Adding...' : 'Submit'} {/* Change the button text when submitting */}
+      </button>
     </form>
 )
 }
