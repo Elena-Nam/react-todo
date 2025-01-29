@@ -63,7 +63,7 @@ return (
 		handleTitleChange={handleTitleChange}> Title
 	  </InputWithLabel>
     
-    <button type="submit" disabled={isSubmitting}> 
+    <button type="submit" disabled={isSubmitting} className = "button"> 
         {isSubmitting ? 'Adding...' : 'Submit'} {/* Change the button text when submitting */}
       </button>
     </form>
