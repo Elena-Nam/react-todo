@@ -1,0 +1,91 @@
+
+nav {
+    background-color: #6B8E23;
+    padding: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  nav li {
+    margin: 0 15px;
+  }
+  
+  nav a {
+    color: black;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  nav a:hover {
+    color: #ff4000;
+  }
+ 
+
+ /* styles for background  NOT WORKING!!!
+.background-home {
+  background-image: url("/images/spring-846051_1280.jpg")
+}
+.background-my-lists {
+  background-image: url("/images/leaves-4291098_1280.jpg");
+}
+.background-not-found {
+  background-image: url("/images/spring-846051_1280.jpg");
+}
+*/
+
+.app-background {
+  background-image: url("../images/spring-846051_1280.jpg");
+  width: 100vw;
+  background-size: cover;
+  background-position: center;
+  height: 100vh; 
+  color: #ff4000;
+   
+}
+.date {
+    font-size: 20px;
+    font-weight: bold;
+    color:black;
+}
+
+.button {
+    background-color: #6B8E23;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .button:hover {
+    background-color: #ff4000;
+  }
+
+/* Container to hold the 3 columns */
+.layoutContainer {
+  display: grid; 
+  grid-template-columns: .5fr 2fr 1fr; 
+  gap: 20px; 
+  padding: 20px;
+}
+
+.column {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .layoutContainer {
+    grid-template-columns: 1fr; 
+  }
+}

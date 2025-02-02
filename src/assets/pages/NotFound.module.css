@@ -1,0 +1,16 @@
+
+.notFoundContainer {
+    text-align: center;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .notFoundHeader {
+    font-size: 2rem;
+    color: #dc2929; 
+  }
+  
+  .notFoundText {
+    font-size: 1.2rem;
+    color: #888;
+  }
