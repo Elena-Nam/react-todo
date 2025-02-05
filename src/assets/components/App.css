@@ -1,34 +1,33 @@
-
+/* navigation bar */
 nav {
-    background-color: #6B8E23;
-    padding: 0 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
+  background-color: #6B8E23;
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  justify-content: space-between;
   }
   
-  nav ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: space-around;
+nav a {
+  color: black;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
   }
   
-  nav li {
-    margin: 0 15px;
-  }
-  
-  nav a {
-    color: black;
-    text-decoration: none;
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  nav a:hover {
-    color: #ff4000;
+nav a:hover {
+  color: #ff4000;
   }
  
+.nav-icons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 50px;
+  margin: 0 2rem;
+  
+  }
 
  /* styles for background  NOT WORKING!!!
 .background-home {
@@ -49,43 +48,69 @@ nav {
   background-position: center;
   height: 100vh; 
   color: #ff4000;
-   
-}
-.date {
-    font-size: 20px;
-    font-weight: bold;
-    color:black;
 }
 
+.date {
+  font-size: 20px;
+  font-weight: bold;
+  color:black;
+}
+.select-date {
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+}
+.title {
+  color: black;
+}
 .button {
-    background-color: #6B8E23;
-    font-weight: bold;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
+  background-color: #6B8E23;
+  font-weight: bold;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
   }
   
-  .button:hover {
-    background-color: #ff4000;
+.button:hover {
+  background-color: #ff4000;
   }
 
 /* Container to hold the 3 columns */
 .layoutContainer {
   display: grid; 
-  grid-template-columns: .5fr 2fr 1fr; 
+  grid-template-columns: 0.5fr 2fr 1fr; 
   gap: 20px; 
   padding: 20px;
 }
 
-.column {
+.column, .column-todo {
   background-color: #f0f0f0;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.column-todo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 @media (max-width: 768px) {
   .layoutContainer {
     grid-template-columns: 1fr; 
+  }
+  nav {
+    flex-direction: column;
+    gap: 0;
+  }
+    nav h3 {
+      display: none; 
+  }
+  
+
+  .app-background{
+  background-image: url("../images/spring-846051_640.jpg");
+
   }
 }

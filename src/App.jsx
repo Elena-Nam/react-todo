@@ -1,16 +1,20 @@
 import * as React from 'react';
-import { BrowserRouter, Routes, Route, Link, Outlet } from 'react-router-dom'
+import { BrowserRouter, Routes, Route,Link, Outlet } from 'react-router-dom'
+import { FaHome, FaTasks } from 'react-icons/fa'; 
 
 import './assets/components/App.css'
+import AddTodoForm from './assets/components/AddTodoForm';
+import Background from './assets/components/Background';
 import Calendar from './assets/components/Calendar';
 import Clock from './assets/components/Clock';
 import Footer from './assets/components/Footer'
-import Background from './assets/components/Background';
-import TodoList from './assets/components/TodoList';
-import AddTodoForm from './assets/components/AddTodoForm';
-import NotFound from './assets/pages/NotFound'; 
+import Menu from './assets/components/Menu';
 import Home from './assets/pages/Home'
+import TodoList from './assets/components/TodoList';
 import {ListsLayout}  from './assets/pages/ListsLayout';
+import NotFound from './assets/pages/NotFound'; 
+
+
 
 
 function App () {
@@ -123,7 +127,7 @@ const Lists = () => {
         <div className ="column">
           <ListsLayout/>
         </div>
-        <div className = "column">
+        <div className = "column-todo">
           <h1> Todo List </h1>
           {isLoading ? (
             <p> Loading... </p>
@@ -135,8 +139,7 @@ const Lists = () => {
         <div className ="column">
           <Calendar selectedDate={date}
              onDateChange={setDate}/>
-          <p className='date'> Selected date: {date.toDateString()}</p>
-          <p className='date'> Today's date: {new Date().toDateString()}</p>
+          <p className='select-date'> Selected date: {date.toDateString()}</p>
         </div>
       </div>
     </>
@@ -150,13 +153,21 @@ return (
   
     <BrowserRouter>
 
-    <Background/>
-    <nav> 
-      <Link to="/"> Home </Link>
-      <Link to="/lists"> My lists </Link>
+    <Background />
+    <nav>
+      <div className = "nav-icons">
+        <Link to="/" className="active">
+          <FaHome size={20} />  
+        </Link>
+        <Link to="/lists" > 
+          <FaTasks size={20} />  </Link>
+      </div>
+      <h3 className = "title"> DAY-TO-DAY </h3>
       <Clock /> 
       <p className='date'> Date: {new Date().toDateString()}</p>
     </nav>
+   
+  
     <Routes>
       <Route path = "/" element = { <Home/> }/>
       <Route path="/lists" element={<Lists />}/>

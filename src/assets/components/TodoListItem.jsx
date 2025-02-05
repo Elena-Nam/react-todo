@@ -1,13 +1,18 @@
 import styles from './TodoListItem.module.css';
 import PropTypes from 'prop-types';
+import { FaTrash, FaEdit, FaCheck } from 'react-icons/fa';  
 
 function TodoListItem ({todo, onRemoveTodo}) {
     return (
-        <div>
-    <li className ={styles.ListItem}> {todo.title} 
-    <button type ="button" className="button" onClick ={() => onRemoveTodo(todo.id)}> Remove </button>
-    </li>
-    </div>
+        <div className ={styles.ListItem}>
+            <li> {todo.title} </li>
+                <div className={styles.button_group}>
+                    <button type ="button" className="button" onClick ={() => onRemoveTodo(todo.id)}> <FaTrash size={15} /></button>
+                    <button type ="button" className="button" onClick ={() => onRemoveTodo(todo.id)}> <FaEdit size={15} /> </button>
+                    <button type ="button" className="button" onClick ={() => onRemoveTodo(todo.id)}> <FaCheck size={15} /></button>
+                </div>
+            
+        </div>
     );
 }
 

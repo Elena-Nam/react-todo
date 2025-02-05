@@ -1,4 +1,18 @@
 .ListItem {
-    padding: 10px;
-    color: black;
+  padding: 1.2rem;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  gap: 10px; 
+}
+
+.button_group {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+li {
+  font-size: 1.2rem;
 }
