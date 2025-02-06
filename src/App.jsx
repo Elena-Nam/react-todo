@@ -119,6 +119,45 @@ const removeTodo = async (id) => {
   }
 }
 
+/* Handle fetching url of the airtable to edit the data */
+
+const editTodo = async (id, newTitle) => {
+  const editedUrl = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}/${id}`;
+
+  const options = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+    },
+    body: JSON.stringify({
+      fields: {
+        title: newTitle,
+      },
+    }),
+  };
+
+  try {
+    const response = await fetch(editedUrl, options);
+
+    if (!response.ok) {
+      const message = `Error: ${response.status}`;
+      throw new Error(message);
+    }
+
+    const data = await response.json();
+
+    // Update the todo list by modifying the edited todo's title
+    const newTodoList = todoList.map((todo) =>
+      todo.id === data.id ? { ...todo, title: data.fields.title } : todo
+    );
+
+    setTodoList(newTodoList); // Update the state with the modified list
+  } catch (error) {
+    console.error('Error editing todo:', error);
+  }
+};
+
 
 const Lists = () => {
   return (
@@ -132,7 +171,7 @@ const Lists = () => {
           {isLoading ? (
             <p> Loading... </p>
             ) : (
-            <TodoList  todoList = {todoList} onRemoveTodo = {removeTodo} /> 
+            <TodoList  todoList = {todoList} onRemoveTodo = {removeTodo}  onEditTodo={editTodo}/> 
           )}
           <AddTodoForm onAddTodo = {AddTodo}/>
         </div>
