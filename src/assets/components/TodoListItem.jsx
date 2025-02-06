@@ -8,8 +8,7 @@ function TodoListItem ({todo, onRemoveTodo}) {
             <li> {todo.title} </li>
                 <div className={styles.button_group}>
                     <button type ="button" className="button" onClick ={() => onRemoveTodo(todo.id)}> <FaTrash size={15} /></button>
-                    <button type ="button" className="button" onClick ={() => onRemoveTodo(todo.id)}> <FaEdit size={15} /> </button>
-                    <button type ="button" className="button" onClick ={() => onRemoveTodo(todo.id)}> <FaCheck size={15} /></button>
+             
                 </div>
             
         </div>
