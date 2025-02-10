@@ -1,16 +1,20 @@
 import * as React from 'react';
-import { BrowserRouter, Routes, Route, Link, Outlet } from 'react-router-dom'
+import { BrowserRouter, Routes, Route,Link, Outlet } from 'react-router-dom'
+import { FaHome, FaTasks } from 'react-icons/fa'; 
 
 import './assets/components/App.css'
+import AddTodoForm from './assets/components/AddTodoForm';
+import Background from './assets/components/Background';
 import Calendar from './assets/components/Calendar';
 import Clock from './assets/components/Clock';
 import Footer from './assets/components/Footer'
-import Background from './assets/components/Background';
-import TodoList from './assets/components/TodoList';
-import AddTodoForm from './assets/components/AddTodoForm';
-import NotFound from './assets/pages/NotFound'; 
+import Menu from './assets/components/Menu';
 import Home from './assets/pages/Home'
+import TodoList from './assets/components/TodoList';
 import {ListsLayout}  from './assets/pages/ListsLayout';
+import NotFound from './assets/pages/NotFound'; 
+
+
 
 
 function App () {
@@ -115,6 +119,45 @@ const removeTodo = async (id) => {
   }
 }
 
+/* Handle fetching url of the airtable to edit the data */
+
+const editTodo = async (id, newTitle) => {
+  const editedUrl = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}/${id}`;
+
+  const options = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+    },
+    body: JSON.stringify({
+      fields: {
+        title: newTitle,
+      },
+    }),
+  };
+
+  try {
+    const response = await fetch(editedUrl, options);
+
+    if (!response.ok) {
+      const message = `Error: ${response.status}`;
+      throw new Error(message);
+    }
+
+    const data = await response.json();
+
+    // Update the todo list by modifying the edited todo's title
+    const newTodoList = todoList.map((todo) =>
+      todo.id === data.id ? { ...todo, title: data.fields.title } : todo
+    );
+
+    setTodoList(newTodoList); // Update the state with the modified list
+  } catch (error) {
+    console.error('Error editing todo:', error);
+  }
+};
+
 
 const Lists = () => {
   return (
@@ -123,20 +166,19 @@ const Lists = () => {
         <div className ="column">
           <ListsLayout/>
         </div>
-        <div className = "column">
+        <div className = "column-todo">
           <h1> Todo List </h1>
           {isLoading ? (
             <p> Loading... </p>
             ) : (
-            <TodoList  todoList = {todoList} onRemoveTodo = {removeTodo} /> 
+            <TodoList  todoList = {todoList} onRemoveTodo = {removeTodo}  onEditTodo={editTodo}/> 
           )}
           <AddTodoForm onAddTodo = {AddTodo}/>
         </div>
         <div className ="column">
           <Calendar selectedDate={date}
              onDateChange={setDate}/>
-          <p className='date'> Selected date: {date.toDateString()}</p>
-          <p className='date'> Today's date: {new Date().toDateString()}</p>
+          <p className='select-date'> Selected date: {date.toDateString()}</p>
         </div>
       </div>
     </>
@@ -150,13 +192,21 @@ return (
   
     <BrowserRouter>
 
-    <Background/>
-    <nav> 
-      <Link to="/"> Home </Link>
-      <Link to="/lists"> My lists </Link>
+    <Background />
+    <nav>
+      <div className = "nav-icons">
+        <Link to="/" className="active">
+          <FaHome size={20} />  
+        </Link>
+        <Link to="/lists" > 
+          <FaTasks size={20} />  </Link>
+      </div>
+      <h3 className = "title"> DAY-TO-DAY </h3>
       <Clock /> 
       <p className='date'> Date: {new Date().toDateString()}</p>
     </nav>
+   
+  
     <Routes>
       <Route path = "/" element = { <Home/> }/>
       <Route path="/lists" element={<Lists />}/>

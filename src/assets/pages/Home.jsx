@@ -1,8 +1,17 @@
+import { useNavigate } from "react-router-dom";
+import styles from '../pages/Home.module.css'
+
 const Home = () => {
+    const navigate = useNavigate();
+
+    const onChangePage = () => {
+      navigate('/lists'); 
+    };
+  
     return (
-      <>
-        <h1> Day-to-Day @</h1>
-    </>
+      <div className = {styles.Home}>
+        <button type = "submit" className={styles.button} onClick={onChangePage}> Start </button>
+      </div>
     )
   }
 
