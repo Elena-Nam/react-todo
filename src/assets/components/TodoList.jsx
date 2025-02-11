@@ -1,4 +1,4 @@
-import TodoListItem from "./TodoListItem";
+import TodoListItem from "./TodoListItem/TodoListItem";
 import PropTypes from 'prop-types';
 
   function TodoList ({ todoList, onRemoveTodo, onEditTodo }) {
