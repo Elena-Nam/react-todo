@@ -63,17 +63,18 @@ nav a:hover {
 .title {
   color: black;
 }
-.button {
+
+.button, .button_toggle {
   background-color: #6B8E23;
   font-weight: bold;
   padding: 10px;
   border: none;
   border-radius: 5px;
-  }
+}
   
-.button:hover {
+.button:hover, .button_toggle:hover {
   background-color: #ff4000;
-  }
+}
 
 /* Container to hold the 3 columns */
 .layoutContainer {
@@ -94,6 +95,12 @@ nav a:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.sorting {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  gap: 10px; 
 }
 
 @media (max-width: 768px) {

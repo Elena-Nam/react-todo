@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom';
-import styles from '../pages/ListLayout.module.css'
+import styles from './ListLayout.module.css'
 
 export function ListsLayout (){
   
