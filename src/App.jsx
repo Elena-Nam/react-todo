@@ -1,20 +1,17 @@
 import * as React from 'react';
 import { BrowserRouter, Routes, Route,Link, Outlet } from 'react-router-dom'
-import { FaHome, FaTasks } from 'react-icons/fa'; 
+import { FaHome, FaTasks,FaSort } from 'react-icons/fa'; 
 
 import './assets/components/App.css'
-import AddTodoForm from './assets/components/AddTodoForm';
+import AddTodoForm from './assets/components/AddTodoForm/AddTodoForm';
 import Background from './assets/components/Background';
-import Calendar from './assets/components/Calendar';
+import Calendar from './assets/components/Calendar/Calendar';
 import Clock from './assets/components/Clock';
-import Footer from './assets/components/Footer'
-import Menu from './assets/components/Menu';
-import Home from './assets/pages/Home'
+import Footer from './assets/components/Footer/Footer'
+import Home from './assets/pages/Home/Home'
 import TodoList from './assets/components/TodoList';
-import {ListsLayout}  from './assets/pages/ListsLayout';
-import NotFound from './assets/pages/NotFound'; 
-
-
+import {ListsLayout}  from './assets/pages/ListLayout/ListsLayout';
+import NotFound from './assets/pages/NotFoundPage/NotFound'; 
 
 
 function App () {
@@ -22,10 +19,11 @@ function App () {
   // Retrieve the saved todo list from localStorage or default to an empty array
   const savedTodoList = JSON.parse (localStorage.getItem ('savedTodoList')) || [];
 
-   // Initialize state with the saved data from localStorage
-  const [todoList, setTodoList] = React.useState ([]); // in the assignment "Update the default state for todoList to be an empty Array" ???
+  const [todoList, setTodoList] = React.useState ([]); 
   const [isLoading, setIsLoading] = React.useState (true);
   const [date, setDate] = React.useState(new Date()); // Track the selected date
+  const [sortDirection, setSortDirection] = React.useState('asc'); 
+  const [sortField, setSortField] = React.useState('title'); 
 
    /* Handle fetching url of the airtable to retrieve data */
 
@@ -38,7 +36,7 @@ function App () {
         },
       };
 
-  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
 
     try {
       const response = await fetch(url,options);
@@ -48,15 +46,31 @@ function App () {
          throw new Error(message);
        }
 
-       const data = await response.json();
-       
-       const todos = data.records.map((todo) => {
+       const data = await response.json(); 
+
+       const todos = data.records
+       .map((todo) => {
           const newTodo =  {
               id: todo.id,
               title: todo.fields.title
           }
           return newTodo;
-      });
+      })
+      /* sorting with JavaScript 
+        .sort ((objectA, objectB) => {
+          const titleA = objectA.title;
+          const titleB = objectB.title;
+
+          if (direction === "asc") {
+            if (titleA < titleB) return -1;
+            if (titleA > titleB) return 1;
+          } else if (direction === "desc") {
+            if (titleA < titleB) return 1;
+            if (titleA > titleB) return -1;
+          }
+          return 0;
+        }
+          );*/
 
          setTodoList(todos);
          setIsLoading (false);
@@ -68,7 +82,7 @@ function App () {
 
 React.useEffect (()=>{
   fetchData();
-},[]);
+},[sortDirection, sortField]);
 
   // Save the todo list to localStorage whenever it changes and is loading is false
   React.useEffect (() => {
@@ -158,6 +172,15 @@ const editTodo = async (id, newTitle) => {
   }
 };
 
+// Function to toggle sorting direction
+const toggleSortDirection = () => {
+  setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
+};
+
+// Function to change sorting field
+const handleSortFieldChange = (event) => {
+  setSortField(event.target.value);
+};
 
 const Lists = () => {
   return (
@@ -166,8 +189,23 @@ const Lists = () => {
         <div className ="column">
           <ListsLayout/>
         </div>
+
         <div className = "column-todo">
           <h1> Todo List </h1>
+
+            <div className = "sorting">
+            <span> Sort by: </span>
+            <label>{/* Dropdown to select sorting field */}
+              <select value={sortField} onChange={handleSortFieldChange}>
+                <option value="title">Title</option>
+                <option value="time">Time</option>
+              </select>
+            </label>
+            <button className = 'button_toggle' onClick={toggleSortDirection}>
+              <FaSort size={15} /> Sort 
+            </button>
+          </div>
+
           {isLoading ? (
             <p> Loading... </p>
             ) : (
@@ -175,6 +213,7 @@ const Lists = () => {
           )}
           <AddTodoForm onAddTodo = {AddTodo}/>
         </div>
+
         <div className ="column">
           <Calendar selectedDate={date}
              onDateChange={setDate}/>
