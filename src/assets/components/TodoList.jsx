@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 
   TodoList.propTypes = {
     todoList: PropTypes.array.isRequired,
-    onRemoveTodo: PropTypes.func.isRequired
+    onRemoveTodo: PropTypes.func.isRequired,
+    onEditTodo: PropTypes.func.isRequired
   }
 export default TodoList;

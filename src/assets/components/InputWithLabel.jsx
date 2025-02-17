@@ -24,7 +24,8 @@ function InputWithLabel ({todoTitle, children, handleTitleChange}) {
 
   InputWithLabel.propTypes = {
     todoTitle: PropTypes.string.isRequired,
-    handleTitleChange: PropTypes.func.isRequired
+    handleTitleChange: PropTypes.func.isRequired,
+    children: PropTypes.string.isRequired
   }
 
   export default InputWithLabel;

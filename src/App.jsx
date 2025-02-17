@@ -1,3 +1,4 @@
+{/*
 import * as React from 'react';
 import { BrowserRouter, Routes, Route,Link, Outlet } from 'react-router-dom'
 import { FaHome, FaTasks,FaSort } from 'react-icons/fa'; 
@@ -17,7 +18,7 @@ import NotFound from './assets/pages/NotFoundPage/NotFound';
 function App () {
 
   // Retrieve the saved todo list from localStorage or default to an empty array
-  const savedTodoList = JSON.parse (localStorage.getItem ('savedTodoList')) || [];
+  //const savedTodoList = JSON.parse (localStorage.getItem ('savedTodoList')) || [];
 
   const [todoList, setTodoList] = React.useState ([]); 
   const [isLoading, setIsLoading] = React.useState (true);
@@ -26,7 +27,7 @@ function App () {
   const [sortField, setSortField] = React.useState('title'); 
 
    /* Handle fetching url of the airtable to retrieve data */
-
+/*
   const fetchData = async() => {
       const options = {
         method: "GET",
@@ -71,7 +72,7 @@ function App () {
           return 0;
         }
           );*/
-
+/*
          setTodoList(todos);
          setIsLoading (false);
 
@@ -97,7 +98,7 @@ function AddTodo (newTodo) {
 
 
 /* Handle fetching url of the airtable to delete the data */
-
+/*
 const removeTodo = async (id) => {
 
   const removedId = id;
@@ -134,7 +135,7 @@ const removeTodo = async (id) => {
 }
 
 /* Handle fetching url of the airtable to edit the data */
-
+/*
 const editTodo = async (id, newTitle) => {
   const editedUrl = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}/${id}`;
 
@@ -196,6 +197,7 @@ const Lists = () => {
             <div className = "sorting">
             <span> Sort by: </span>
             <label>{/* Dropdown to select sorting field */}
+            /*
               <select value={sortField} onChange={handleSortFieldChange}>
                 <option value="title">Title</option>
                 <option value="time">Time</option>
@@ -263,5 +265,77 @@ return (
 
 
     
+
+export default App; */
+
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { FaHome, FaTasks } from 'react-icons/fa';
+import './assets/components/App.css';
+import Background from './assets/components/Background';
+import Calendar from './assets/components/Calendar/Calendar';
+import Clock from './assets/components/Clock';
+import Footer from './assets/components/Footer/Footer';
+import Home from './assets/pages/Home/Home';
+import NotFound from './assets/pages/NotFoundPage/NotFound';
+import TodoContainer from './assets/components/TodoContainer/TodoContainer';  // Import TodoContainer component
+import {ListsLayout}  from './assets/pages/ListLayout/ListsLayout';
+
+function App() {
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortField, setSortField] = useState('title');
+  const [date, setDate] = useState(new Date());
+
+  return (
+    <div className="app-background">
+      <BrowserRouter>
+        <Background />
+        <nav>
+          <div className="nav-icons">
+            <Link to="/" className="active">
+              <FaHome size={20} />
+            </Link>
+            <Link to="/lists">
+              <FaTasks size={20} />
+            </Link>
+          </div>
+          <h3 className="title">DAY-TO-DAY</h3>
+          <Clock />
+          <p className="date"> Date: {new Date().toDateString()}</p>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/lists"
+            element={
+              <div className="layoutContainer">
+                <div className ="column">
+                  <ListsLayout/>
+                </div>
+                <div className="column">
+                  <TodoContainer
+                    sortDirection={sortDirection}
+                    sortField={sortField}
+                    setSortDirection={setSortDirection}
+                    setSortField={setSortField}
+                  />
+                </div>
+
+                <div className="column">
+                  <Calendar selectedDate={date} onDateChange={setDate} />
+                  <p className="select-date">Selected date: {date.toDateString()}</p>
+                </div>
+              </div>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+
+      <Footer />
+    </div>
+  );
+}
 
 export default App;

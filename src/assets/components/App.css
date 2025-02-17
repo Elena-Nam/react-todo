@@ -90,7 +90,7 @@ nav a:hover {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
+/*
 .column-todo {
   display: flex;
   flex-direction: column;
@@ -102,7 +102,7 @@ nav a:hover {
   font-weight: bold;
   gap: 10px; 
 }
-
+*/
 @media (max-width: 768px) {
   .layoutContainer {
     grid-template-columns: 1fr; 
