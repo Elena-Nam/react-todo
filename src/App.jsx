@@ -263,22 +263,18 @@ return (
 
 }
 
-
-    
-
 export default App; */
 
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { FaHome, FaTasks } from 'react-icons/fa';
 import './assets/components/App.css';
-import Background from './assets/components/Background';
 import Calendar from './assets/components/Calendar/Calendar';
 import Clock from './assets/components/Clock';
 import Footer from './assets/components/Footer/Footer';
 import Home from './assets/pages/Home/Home';
 import NotFound from './assets/pages/NotFoundPage/NotFound';
-import TodoContainer from './assets/components/TodoContainer/TodoContainer';  // Import TodoContainer component
+import TodoContainer from './assets/components/TodoContainer/TodoContainer';  
 import {ListsLayout}  from './assets/pages/ListLayout/ListsLayout';
 
 function App() {
@@ -289,7 +285,6 @@ function App() {
   return (
     <div className="app-background">
       <BrowserRouter>
-        <Background />
         <nav>
           <div className="nav-icons">
             <Link to="/" className="active">

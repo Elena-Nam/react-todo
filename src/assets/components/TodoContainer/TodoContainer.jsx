@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import TodoList from '../TodoList'; 
 import AddTodoForm from '../AddTodoForm/AddTodoForm';  
 import styles from './TodoContainer.module.css';
@@ -139,6 +140,13 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       <AddTodoForm onAddTodo={addTodo} />
     </div>
   );
+};
+
+TodoContainer.propTypes = {
+  sortDirection: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  sortField: PropTypes.oneOf(['title', 'time']).isRequired,
+  setSortDirection: PropTypes.func.isRequired,
+  setSortField: PropTypes.func.isRequired,
 };
 
 export default TodoContainer;
