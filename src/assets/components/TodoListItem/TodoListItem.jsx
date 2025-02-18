@@ -33,7 +33,10 @@ function TodoListItem ({todo, onRemoveTodo, onEditTodo}) {
           <button type="button" className="button" onClick={handleCancelEdit}><FaTrash size={15} /></button>
         </div>
         ) : (
-        <span>{todo.title}</span>
+        <div className ={styles.todo_group}>
+          <span>{todo.title}</span>
+          <span>{todo.createdAt}</span>
+        </div>
         )}
     </li>
 

@@ -314,6 +314,7 @@ function App() {
                     sortField={sortField}
                     setSortDirection={setSortDirection}
                     setSortField={setSortField}
+                    selectedDate={date}
                   />
                 </div>
 

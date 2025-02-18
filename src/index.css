@@ -39,6 +39,7 @@ h1 {
 }
 
 /* styles for the calendar*/
+
 button {
   border-radius: 8px;
   border: 2px solid transparent;
@@ -58,6 +59,11 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+.react-calendar__tile--active {
+  background-color: #6B8E23; 
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {

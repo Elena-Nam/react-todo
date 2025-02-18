@@ -5,7 +5,7 @@ import AddTodoForm from '../AddTodoForm/AddTodoForm';
 import styles from './TodoContainer.module.css';
 import { FaSort } from 'react-icons/fa';
 
-const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortField }) => {
+const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortField,selectedDate }) => {
   const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,6 +31,7 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       const todos = data.records.map((todo) => ({
         id: todo.id,
         title: todo.fields.title,
+        createdAt: todo.fields.createdAt, 
       }));
 
       setTodoList(todos);
@@ -137,7 +138,7 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
         <TodoList todoList={todoList} onRemoveTodo={removeTodo} onEditTodo={editTodo} />
       )}
 
-      <AddTodoForm onAddTodo={addTodo} />
+      <AddTodoForm onAddTodo={addTodo} selectedDate={selectedDate}/>
     </div>
   );
 };
@@ -147,6 +148,7 @@ TodoContainer.propTypes = {
   sortField: PropTypes.oneOf(['title', 'time']).isRequired,
   setSortDirection: PropTypes.func.isRequired,
   setSortField: PropTypes.func.isRequired,
+  selectedDate: PropTypes.instanceOf(Date).isRequired,
 };
 
 export default TodoContainer;
