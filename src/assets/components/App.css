@@ -14,11 +14,11 @@ nav a {
   text-decoration: none;
   font-size: 20px;
   font-weight: bold;
-  }
+}
   
 nav a:hover {
   color: #ff4000;
-  }
+}
  
 .nav-icons {
   display: flex;
@@ -26,20 +26,7 @@ nav a:hover {
   align-items: center;
   gap: 50px;
   margin: 0 2rem;
-  
-  }
-
- /* styles for background  NOT WORKING!!!
-.background-home {
-  background-image: url("/images/spring-846051_1280.jpg")
 }
-.background-my-lists {
-  background-image: url("/images/leaves-4291098_1280.jpg");
-}
-.background-not-found {
-  background-image: url("/images/spring-846051_1280.jpg");
-}
-*/
 
 .app-background {
   background-image: url("../images/spring-846051_1280.jpg");
@@ -84,23 +71,11 @@ nav a:hover {
   padding: 20px;
 }
 
-.column, .column-todo {
+.column {
   background-color: #f0f0f0;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.column-todo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.sorting {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  gap: 10px; 
 }
 
 @media (max-width: 768px) {
@@ -116,8 +91,7 @@ nav a:hover {
   }
   
 
-  .app-background{
-  background-image: url("../images/spring-846051_640.jpg");
-
+  .app-background {
+  background: rgb(106, 169, 26);
   }
 }
