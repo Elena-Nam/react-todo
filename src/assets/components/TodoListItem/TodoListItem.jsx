@@ -19,6 +19,13 @@ function TodoListItem ({todo, onRemoveTodo, onEditTodo}) {
     setNewTitle(todo.title); // Revert to the original title
   };
 
+  const formattedDate = new Date(todo.createdAt).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }); 
+  
+
   return (
   <div className ={styles.ListItem}>
     <li>
@@ -35,8 +42,8 @@ function TodoListItem ({todo, onRemoveTodo, onEditTodo}) {
         ) : (
         <div className ={styles.todo_group}>
           <span>{todo.title}</span>
-          <span>{todo.createdAt}</span>
-        </div>
+          <span> {formattedDate} </span>
+           </div>
         )}
     </li>
 

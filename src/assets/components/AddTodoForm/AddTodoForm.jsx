@@ -22,7 +22,7 @@ function AddTodoForm ({onAddTodo, selectedDate}) {
 	  const newTodo = {
       fields: {
       title: todoTitle, // Pass the title from the state
-      createdAt: selectedDate.toISOString().split('T')[0] // to add the date without time to todo 
+      createdAt: selectedDate.toISOString() 
       },
 	  };
     console.log(newTodo);

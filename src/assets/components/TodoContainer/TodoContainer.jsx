@@ -28,13 +28,28 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       }
 
       const data = await response.json();
+     
+
       const todos = data.records.map((todo) => ({
         id: todo.id,
         title: todo.fields.title,
-        createdAt: todo.fields.createdAt, 
+        createdAt: new Date(todo.fields.createdAt),
       }));
 
-      setTodoList(todos);
+        // Sort the todos by the selected field (title or time)
+    const sortedTodos = todos.sort((a, b) => {
+      if (sortField === 'time') {
+        return sortDirection === 'asc'
+          ? a.createdAt - b.createdAt
+          : b.createdAt - a.createdAt;
+      }
+      // Default sorting by title 
+      return sortDirection === 'asc'
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title);
+    });
+
+      setTodoList(sortedTodos);
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error.message);
