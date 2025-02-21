@@ -21,19 +21,14 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
 
    /* 1 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
     /* 2 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=createdAt&sort[0][direction]=${sortDirection}`;*/
-    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=title&sort[0][direction]=${sortDirection}&sort[1][field]=createdAt&sort[1][direction]=${sortDirection}`;
-
-
+  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=title&sort[0][direction]=${sortDirection}&sort[1][field]=createdAt&sort[1][direction]=${sortDirection}`;
 
     try {
       const response = await fetch(url, options);
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-
       const data = await response.json();
-     
-
       const todos = data.records.map((todo) => ({
         id: todo.id,
         title: todo.fields.title,
@@ -52,7 +47,7 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
         ? a.title.localeCompare(b.title)
         : b.title.localeCompare(a.title);
     });
-
+    
       setTodoList(sortedTodos);
       setIsLoading(false);
     } catch (error) {
