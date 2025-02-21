@@ -19,7 +19,11 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       },
     };
 
-    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
+   /* 1 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
+    /* 2 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=createdAt&sort[0][direction]=${sortDirection}`;*/
+    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=title&sort[0][direction]=${sortDirection}&sort[1][field]=createdAt&sort[1][direction]=${sortDirection}`;
+
+
 
     try {
       const response = await fetch(url, options);
@@ -37,7 +41,7 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       }));
 
         // Sort the todos by the selected field (title or time)
-    const sortedTodos = todos.sort((a, b) => {
+   const sortedTodos = todos.sort((a, b) => {
       if (sortField === 'time') {
         return sortDirection === 'asc'
           ? a.createdAt - b.createdAt
