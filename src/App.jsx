@@ -41,6 +41,14 @@ function App() {
               <div className="layoutContainer">
                 <div className ="column">
                   <ListsLayout/>
+                  <TodoContainer
+                    sortDirection={sortDirection}
+                    sortField={sortField}
+                    setSortDirection={setSortDirection}
+                    setSortField={setSortField}
+                    selectedDate={date}
+                    filterStatus="completed"
+                  />
                 </div>
                 <div className="column">
                   <TodoContainer
@@ -49,6 +57,7 @@ function App() {
                     setSortDirection={setSortDirection}
                     setSortField={setSortField}
                     selectedDate={date}
+                    filterStatus="active"
                   />
                 </div>
 

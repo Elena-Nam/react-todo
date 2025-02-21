@@ -8,6 +8,7 @@ import { FaSort } from 'react-icons/fa';
 const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortField,selectedDate }) => {
   const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [completedTodoList, setCompletedTodoList] = useState([]); 
 
   // Function to fetch todos from Airtable API
   const fetchData = async () => {
@@ -33,10 +34,11 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
         id: todo.id,
         title: todo.fields.title,
         createdAt: new Date(todo.fields.createdAt),
+        status: todo.fields.status|| false,
       }));
-
+    
         // Sort the todos by the selected field (title or time)
-   const sortedTodos = todos.sort((a, b) => {
+   /*const sortedTodos = todos.sort((a, b) => {
       if (sortField === 'time') {
         return sortDirection === 'asc'
           ? a.createdAt - b.createdAt
@@ -49,7 +51,36 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
     });
     
       setTodoList(sortedTodos);
-      setIsLoading(false);
+      setIsLoading(false);*/
+
+       // Filter todos by status (Completed and In Progress/ToDo)
+       const completedTodos = todos.filter(todo => todo.status === true);
+       const remainingTodos = todos.filter(todo => todo.status !== true);
+ 
+       // Sort the "Remaining Todos"
+       const sortedRemainingTodos = remainingTodos.sort((a, b) => {
+         if (sortField === 'time') {
+           return sortDirection === 'asc' ? a.createdAt - b.createdAt : b.createdAt - a.createdAt;
+         }
+         return sortDirection === 'asc'
+           ? a.title.localeCompare(b.title)
+           : b.title.localeCompare(a.title);
+       });
+ 
+       // Sort the "Completed Todos"
+       const sortedCompletedTodos = completedTodos.sort((a, b) => {
+         if (sortField === 'time') {
+           return sortDirection === 'asc' ? a.createdAt - b.createdAt : b.createdAt - a.createdAt;
+         }
+         return sortDirection === 'asc'
+           ? a.title.localeCompare(b.title)
+           : b.title.localeCompare(a.title);
+       });
+ 
+       // Set the state for both lists
+       setTodoList(sortedRemainingTodos);
+       setCompletedTodoList(sortedCompletedTodos);
+       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error.message);
     }
@@ -119,7 +150,51 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       console.error('Error editing todo:', error);
     }
   };
+//
+// Function to toggle status between Active and Completed
+const toggleStatus = async (id, currentStatus) => {
+  const newStatus = currentStatus ? false : true;  // Toggle checkbox value (true <=> false)
+  const editedUrl = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}/${id}`;
 
+  const options = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+    },
+    body: JSON.stringify({
+      fields: {
+        status: newStatus,
+      },
+    }),
+  };
+
+  try {
+    const response = await fetch(editedUrl, options);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // Update the local state to reflect the status change
+    setTodoList((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === data.id ? { ...todo, status: newStatus } : todo
+      )
+    );
+
+    setCompletedTodoList((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === data.id ? { ...todo, status: newStatus } : todo
+      )
+    );
+  } catch (error) {
+    console.error('Error toggling status:', error);
+  }
+};
+
+//
   // Function to toggle sorting direction
   const toggleSortDirection = () => {
     setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
@@ -146,13 +221,55 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
         </button>
       </div>
 
-      {isLoading ? (
+     {/* {isLoading ? (
         <p>Loading...</p>
       ) : (
         <TodoList todoList={todoList} onRemoveTodo={removeTodo} onEditTodo={editTodo} />
       )}
 
       <AddTodoForm onAddTodo={addTodo} selectedDate={selectedDate}/>
+    </div>
+  );
+};
+
+
+TodoContainer.propTypes = {
+  sortDirection: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  sortField: PropTypes.oneOf(['title', 'time']).isRequired,
+  setSortDirection: PropTypes.func.isRequired,
+  setSortField: PropTypes.func.isRequired,
+  selectedDate: PropTypes.instanceOf(Date).isRequired,
+};
+*/}
+
+
+{/* Display Regular Todo List */}
+<h2>Active Todo List</h2>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <TodoList
+          todoList={todoList}
+          onRemoveTodo={removeTodo}
+          onEditTodo={editTodo}
+          onToggleStatus={toggleStatus}  // Pass toggle function as prop
+        />
+      )}
+
+      {/* Display Completed Todo List */}
+      <h2>Completed Todo List</h2>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <TodoList
+          todoList={completedTodoList}
+          onRemoveTodo={removeTodo}
+          onEditTodo={editTodo}
+          onToggleStatus={toggleStatus}  // Pass toggle function as prop
+        />
+      )}
+
+      <AddTodoForm onAddTodo={addTodo} selectedDate={selectedDate} />
     </div>
   );
 };
@@ -166,3 +283,5 @@ TodoContainer.propTypes = {
 };
 
 export default TodoContainer;
+
+
