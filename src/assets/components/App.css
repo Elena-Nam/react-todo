@@ -3,7 +3,6 @@ nav {
   background-color: #6B8E23;
   padding: 0 10px;
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 50px;
   justify-content: space-between;
@@ -33,22 +32,15 @@ nav a:hover {
   width: 100vw;
   background-size: cover;
   background-position: center;
-  height: 100vh; 
+  height: 100vh;
   color: #ff4000;
+  
 }
 
-.date {
+.date,.select-date,.title {
   font-size: 20px;
   font-weight: bold;
   color:black;
-}
-.select-date {
-  font-size: 20px;
-  font-weight: bold;
-  color: black;
-}
-.title {
-  color: black;
 }
 
 .button, .button_toggle {
@@ -78,7 +70,7 @@ nav a:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 768px) {
+@media  (max-width: 768px) {
   .layoutContainer {
     grid-template-columns: 1fr; 
   }
@@ -89,9 +81,6 @@ nav a:hover {
     nav h3 {
       display: none; 
   }
-  
-
-  .app-background {
-  background: rgb(106, 169, 26);
-  }
 }
+
+

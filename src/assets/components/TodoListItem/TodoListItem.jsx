@@ -46,24 +46,24 @@ function TodoListItem ({todo, onRemoveTodo, onEditTodo, onToggleStatus}) {
         </div>
         ) : (
         <div className ={styles.todo_group}>
-          <span>{todo.title}</span>
+          <span> {todo.title} </span>
           <span> {formattedDate} </span>
-           </div>
-        )}
+        </div>
+      )}
     </li>
 
   <div className={styles.button_group}>
     {!isEditing && (
       <>
-      <button type="button" className="button" onClick={() => setIsEditing(true)}>
-        <FaEdit size={15} />
-      </button>
-      <button type="button" className="button" onClick={() => onRemoveTodo(todo.id)}>
-        <FaTrash size={15} />
-      </button>
-      <button type="button" className="button" onClick={handleToggleStatus}>
-      {todo.status ? <FaCheck size={15} /> : <FaHourglassHalf size={15} />}
-      </button>
+        <button type="button" className="button" onClick={() => setIsEditing(true)}>
+          <FaEdit size={15} />
+        </button>
+        <button type="button" className="button" onClick={() => onRemoveTodo(todo.id)}>
+          <FaTrash size={15} />
+        </button>
+        <button type="button" className="button" onClick={handleToggleStatus}>
+          {todo.status ? <FaCheck size={15} /> : <FaHourglassHalf size={15} />}
+        </button>
       </>
     )}
   </div>

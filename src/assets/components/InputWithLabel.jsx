@@ -7,20 +7,20 @@ function InputWithLabel ({todoTitle, children, handleTitleChange}) {
         inputRef.current.focus();
     })
 
-    return (
-     <>
-        <label htmlFor = "todoTitle"> {children} </label>
+  return (
+    <>
+      <label htmlFor = "todoTitle"> {children} </label>
         <input 
-        ref = {inputRef}
-        id = "todoTitle" 
-        name = "title" 
-        value = {todoTitle} 
-        type = "text" required 
-        onChange={handleTitleChange} 
-       /> 
-     </>
-    );
-  }
+          ref = {inputRef}
+          id = "todoTitle" 
+          name = "title" 
+          value = {todoTitle} 
+          type = "text" required 
+          onChange={handleTitleChange} 
+        /> 
+    </>
+  );
+}
 
   InputWithLabel.propTypes = {
     todoTitle: PropTypes.string.isRequired,

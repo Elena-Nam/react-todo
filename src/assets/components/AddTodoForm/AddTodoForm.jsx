@@ -62,13 +62,13 @@ function AddTodoForm ({onAddTodo, selectedDate}) {
 	 
 return (
     <form className={styles.inputForm} onSubmit = {handleAddTodo}>
-	  <InputWithLabel 
-		todoTitle={todoTitle} 
-		handleTitleChange={handleTitleChange}> Title
-	  </InputWithLabel>
+      <InputWithLabel 
+        todoTitle={todoTitle} 
+        handleTitleChange={handleTitleChange}> Title
+      </InputWithLabel>
     
-    <button type="submit" disabled={isSubmitting} className = "button"> 
-        {isSubmitting ? 'Adding...' : 'Submit'} {/* Change the button text when submitting */}
+      <button type="submit" disabled={isSubmitting} className = "button"> 
+          {isSubmitting ? 'Adding...' : 'Submit'} {/* Change the button text when submitting */}
       </button>
     </form>
 )
