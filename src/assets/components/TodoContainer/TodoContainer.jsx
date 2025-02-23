@@ -5,10 +5,17 @@ import AddTodoForm from '../AddTodoForm/AddTodoForm';
 import styles from './TodoContainer.module.css';
 import { FaSort } from 'react-icons/fa';
 
-const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortField,selectedDate }) => {
+const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortField,selectedDate, selectedCategory }) => {
   const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [completedTodoList, setCompletedTodoList] = useState([]); 
+ 
+  const [todosByCategory, setTodosByCategory] = useState({
+    study: [],
+    work: [],
+    grocery: [],
+    other: [],
+  });
 
   // Function to fetch todos from Airtable API
   const fetchData = async () => {
@@ -33,7 +40,20 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
         title: todo.fields.title,
         createdAt: new Date(todo.fields.createdAt),
         status: todo.fields.status|| false,
+        category: todo.fields.category || 'other',
       }));
+
+      const categorizedTodos = {
+        study: [],
+        work: [],
+        grocery: [],
+        other: [],
+      };
+      todos.forEach((todo) => {
+        categorizedTodos[todo.category].push(todo);
+      });
+  
+     
 
        // Filter todos by status (Completed and In Progress)
        const completedTodos = todos.filter(todo => todo.status === true);
@@ -59,10 +79,12 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
            : b.title.localeCompare(a.title);
        });
  
-       // Set the state for both lists
+       // Set the state for lists
        setTodoList(sortedRemainingTodos);
        setCompletedTodoList(sortedCompletedTodos);
+       setTodosByCategory(categorizedTodos);
        setIsLoading(false);
+
     } catch (error) {
       console.error('Error fetching data:', error.message);
     }
@@ -70,7 +92,7 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
 
   useEffect(() => {
     fetchData();
-  }, [sortDirection, sortField]);
+  }, [sortDirection, sortField, selectedCategory]);
 
   const addTodo = (newTodo) => {
     setTodoList((prevTodoList) => [...prevTodoList, newTodo]);
@@ -92,6 +114,9 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
+
+    // update the todo list after removing a todo, re-fetch the data
+      fetchData(); 
 
       const data = await response.json();
       const newTodoList = todoList.filter((todo) => todo.id !== data.id);
@@ -157,6 +182,9 @@ const toggleStatus = async (id, currentStatus) => {
       throw new Error(`Error: ${response.status}`);
     }
 
+    // update the todo list after toggling the status, re-fetch the data
+    fetchData(); 
+
     const data = await response.json();
 
     // Update the local state to reflect the status change
@@ -209,7 +237,7 @@ const toggleStatus = async (id, currentStatus) => {
         <>
           <h2>Active Todo List</h2>
           <TodoList
-            todoList={todoList}
+            todoList={todosByCategory[selectedCategory]}
             onRemoveTodo={removeTodo}
             onEditTodo={editTodo}
             onToggleStatus={toggleStatus} 
@@ -240,6 +268,7 @@ TodoContainer.propTypes = {
   setSortDirection: PropTypes.func.isRequired,
   setSortField: PropTypes.func.isRequired,
   selectedDate: PropTypes.instanceOf(Date).isRequired,
+  selectedCategory: PropTypes.string.isRequired,
 };
 
 export default TodoContainer;

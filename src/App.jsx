@@ -9,13 +9,14 @@ import Footer from './assets/components/Footer/Footer';
 import Home from './assets/pages/Home/Home';
 import NotFound from './assets/pages/NotFoundPage/NotFound';
 import TodoContainer from './assets/components/TodoContainer/TodoContainer';  
-import {ListsLayout}  from './assets/pages/ListLayout/ListsLayout';
+import ListsLayout  from './assets/components/ListLayout/ListsLayout';
 
 function App() {
   const [sortDirection, setSortDirection] = useState('asc');
   const [sortField, setSortField] = useState('time');
   const [date, setDate] = useState(new Date());
-
+  const [selectedCategory, setSelectedCategory] = useState ('study');
+ 
   return (
     <div className="app-background">
       <BrowserRouter>
@@ -40,7 +41,7 @@ function App() {
             element={
               <div className="layoutContainer">
                 <div className ="column">
-                  <ListsLayout/>
+                <ListsLayout setSelectedCategory={setSelectedCategory} />
                 </div>
                 <div className="column">
                   <TodoContainer
@@ -49,6 +50,7 @@ function App() {
                     setSortDirection={setSortDirection}
                     setSortField={setSortField}
                     selectedDate={date}
+                    selectedCategory={selectedCategory}
                   />
                 </div>
 
