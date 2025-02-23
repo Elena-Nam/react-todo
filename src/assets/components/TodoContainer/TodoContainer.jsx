@@ -20,8 +20,6 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       },
     };
 
-   /* 1 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
-    /* 2 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=createdAt&sort[0][direction]=${sortDirection}`;*/
   const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=title&sort[0][direction]=${sortDirection}&sort[1][field]=createdAt&sort[1][direction]=${sortDirection}`;
 
     try {
@@ -36,24 +34,8 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
         createdAt: new Date(todo.fields.createdAt),
         status: todo.fields.status|| false,
       }));
-    
-        // Sort the todos by the selected field (title or time)
-   /*const sortedTodos = todos.sort((a, b) => {
-      if (sortField === 'time') {
-        return sortDirection === 'asc'
-          ? a.createdAt - b.createdAt
-          : b.createdAt - a.createdAt;
-      }
-      // Default sorting by title 
-      return sortDirection === 'asc'
-        ? a.title.localeCompare(b.title)
-        : b.title.localeCompare(a.title);
-    });
-    
-      setTodoList(sortedTodos);
-      setIsLoading(false);*/
 
-       // Filter todos by status (Completed and In Progress/ToDo)
+       // Filter todos by status (Completed and In Progress)
        const completedTodos = todos.filter(todo => todo.status === true);
        const remainingTodos = todos.filter(todo => todo.status !== true);
  
@@ -150,7 +132,7 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       console.error('Error editing todo:', error);
     }
   };
-//
+
 // Function to toggle status between Active and Completed
 const toggleStatus = async (id, currentStatus) => {
   const newStatus = currentStatus ? false : true;  // Toggle checkbox value (true <=> false)
@@ -221,52 +203,30 @@ const toggleStatus = async (id, currentStatus) => {
         </button>
       </div>
 
-     {/* {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <TodoList todoList={todoList} onRemoveTodo={removeTodo} onEditTodo={editTodo} />
-      )}
-
-      <AddTodoForm onAddTodo={addTodo} selectedDate={selectedDate}/>
-    </div>
-  );
-};
-
-
-TodoContainer.propTypes = {
-  sortDirection: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  sortField: PropTypes.oneOf(['title', 'time']).isRequired,
-  setSortDirection: PropTypes.func.isRequired,
-  setSortField: PropTypes.func.isRequired,
-  selectedDate: PropTypes.instanceOf(Date).isRequired,
-};
-*/}
-
-
-{/* Display Regular Todo List */}
-<h2>Active Todo List</h2>
       {isLoading ? (
-        <p>Loading...</p>
+        <p> Loading...</p>
       ) : (
-        <TodoList
-          todoList={todoList}
-          onRemoveTodo={removeTodo}
-          onEditTodo={editTodo}
-          onToggleStatus={toggleStatus}  // Pass toggle function as prop
-        />
-      )}
-
-      {/* Display Completed Todo List */}
-      <h2>Completed Todo List</h2>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <TodoList
-          todoList={completedTodoList}
-          onRemoveTodo={removeTodo}
-          onEditTodo={editTodo}
-          onToggleStatus={toggleStatus}  // Pass toggle function as prop
-        />
+        <>
+          <h2>Active Todo List</h2>
+          <TodoList
+            todoList={todoList}
+            onRemoveTodo={removeTodo}
+            onEditTodo={editTodo}
+            onToggleStatus={toggleStatus} 
+          />
+          
+          {completedTodoList.length > 0 && (
+          <>
+          <h2>Completed Todo List</h2>
+          <TodoList
+            todoList={completedTodoList}
+            onRemoveTodo={removeTodo}
+            onEditTodo={editTodo}
+            onToggleStatus={toggleStatus} 
+          />
+          </>
+          )}
+        </>
       )}
 
       <AddTodoForm onAddTodo={addTodo} selectedDate={selectedDate} />
