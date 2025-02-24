@@ -96,6 +96,8 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
 
   const addTodo = (newTodo) => {
     setTodoList((prevTodoList) => [...prevTodoList, newTodo]);
+    // update the todo list after adding a todo, re-fetch the data
+    fetchData(); 
   };
 
   const removeTodo = async (id) => {
@@ -204,7 +206,6 @@ const toggleStatus = async (id, currentStatus) => {
   }
 };
 
-//
   // Function to toggle sorting direction
   const toggleSortDirection = () => {
     setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
@@ -231,33 +232,36 @@ const toggleStatus = async (id, currentStatus) => {
         </button>
       </div>
 
-      {isLoading ? (
-        <p> Loading...</p>
+    {isLoading ? (
+      <p> Loading...</p>
       ) : (
-        <>
-          <h2>Active Todo List</h2>
-          <TodoList
-            todoList={todosByCategory[selectedCategory]}
-            onRemoveTodo={removeTodo}
-            onEditTodo={editTodo}
-            onToggleStatus={toggleStatus} 
-          />
-          
-          {completedTodoList.length > 0 && (
+      <>
+        {todosByCategory[selectedCategory].length > 0 && (
           <>
-          <h2>Completed Todo List</h2>
-          <TodoList
-            todoList={completedTodoList}
-            onRemoveTodo={removeTodo}
-            onEditTodo={editTodo}
-            onToggleStatus={toggleStatus} 
-          />
+            <h2>Active Todo List</h2>
+            <TodoList
+            todoList={todosByCategory[selectedCategory].filter(todo => !todo.status)}
+              onRemoveTodo={removeTodo}
+              onEditTodo={editTodo}
+              onToggleStatus={toggleStatus} 
+            />
           </>
-          )}
-        </>
-      )}
+        )}
+        {todosByCategory[selectedCategory].length > 0 && (
+          <>
+            <h2>Completed Todo List</h2>
+            <TodoList
+              todoList={todosByCategory[selectedCategory].filter(todo => todo.status)}
+              onRemoveTodo={removeTodo}
+              onEditTodo={editTodo}
+              onToggleStatus={toggleStatus} 
+            />
+          </>
+        )}
+      </>
+    )}
 
-      <AddTodoForm onAddTodo={addTodo} selectedDate={selectedDate} />
+    <AddTodoForm onAddTodo={addTodo} selectedDate={selectedDate} selectedCategory={selectedCategory}/>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import InputWithLabel from '../InputWithLabel';
 import PropTypes from 'prop-types';
 import styles from './AddTodoForm.module.css'; 
 
-function AddTodoForm ({onAddTodo, selectedDate}) {
+function AddTodoForm ({onAddTodo, selectedDate, selectedCategory}) {
   const [todoTitle, setTodoTitle] = useState ('');
   const [isSubmitting, setIsSubmitting] = useState(false); // New state for handling the button disable/enable
     
@@ -22,7 +22,8 @@ function AddTodoForm ({onAddTodo, selectedDate}) {
 	  const newTodo = {
       fields: {
       title: todoTitle, // Pass the title from the state
-      createdAt: selectedDate.toISOString() 
+      createdAt: selectedDate.toISOString(),
+      category: selectedCategory,
       },
 	  };
     console.log(newTodo);
@@ -46,12 +47,14 @@ function AddTodoForm ({onAddTodo, selectedDate}) {
         id: data.id,
         title: data.fields.title,
         createdAt: data.fields.createdAt,
+        category: data.fields.category, 
       };
   
       onAddTodo(addedNewTodo); // Pass the added todo to the parent
 
       setTodoTitle(''); // Clear the input field after adding the todo
-	  
+      
+      	  
     } catch (error) {
       console.error('Error adding todo:', error);
     } finally {
@@ -78,6 +81,7 @@ return (
 AddTodoForm.propTypes = {
   onAddTodo: PropTypes.func.isRequired,
   selectedDate: PropTypes.instanceOf(Date).isRequired,
+  selectedCategory: PropTypes.string.isRequired,
 }
 
 export default AddTodoForm;
