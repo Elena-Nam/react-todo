@@ -5,9 +5,17 @@ import AddTodoForm from '../AddTodoForm/AddTodoForm';
 import styles from './TodoContainer.module.css';
 import { FaSort } from 'react-icons/fa';
 
-const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortField }) => {
+const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortField,selectedDate, selectedCategory }) => {
   const [todoList, setTodoList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [completedTodoList, setCompletedTodoList] = useState([]); 
+ 
+  const [todosByCategory, setTodosByCategory] = useState({
+    study: [],
+    work: [],
+    grocery: [],
+    other: [],
+  });
 
   // Function to fetch todos from Airtable API
   const fetchData = async () => {
@@ -19,22 +27,64 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       },
     };
 
-    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=${sortField}&sort[0][direction]=${sortDirection}`;
+  const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}?view=Grid%20view&sort[0][field]=title&sort[0][direction]=${sortDirection}&sort[1][field]=createdAt&sort[1][direction]=${sortDirection}`;
 
     try {
       const response = await fetch(url, options);
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-
       const data = await response.json();
       const todos = data.records.map((todo) => ({
         id: todo.id,
         title: todo.fields.title,
+        createdAt: new Date(todo.fields.createdAt),
+        status: todo.fields.status|| false,
+        category: todo.fields.category || 'other',
       }));
 
-      setTodoList(todos);
-      setIsLoading(false);
+      const categorizedTodos = {
+        study: [],
+        work: [],
+        grocery: [],
+        other: [],
+      };
+      todos.forEach((todo) => {
+        categorizedTodos[todo.category].push(todo);
+      });
+  
+     
+
+       // Filter todos by status (Completed and In Progress)
+       const completedTodos = todos.filter(todo => todo.status === true);
+       const remainingTodos = todos.filter(todo => todo.status !== true);
+ 
+       // Sort the "Remaining Todos"
+       const sortedRemainingTodos = remainingTodos.sort((a, b) => {
+         if (sortField === 'time') {
+           return sortDirection === 'asc' ? a.createdAt - b.createdAt : b.createdAt - a.createdAt;
+         }
+         return sortDirection === 'asc'
+           ? a.title.localeCompare(b.title)
+           : b.title.localeCompare(a.title);
+       });
+ 
+       // Sort the "Completed Todos"
+       const sortedCompletedTodos = completedTodos.sort((a, b) => {
+         if (sortField === 'time') {
+           return sortDirection === 'asc' ? a.createdAt - b.createdAt : b.createdAt - a.createdAt;
+         }
+         return sortDirection === 'asc'
+           ? a.title.localeCompare(b.title)
+           : b.title.localeCompare(a.title);
+       });
+ 
+       // Set the state for lists
+       setTodoList(sortedRemainingTodos);
+       setCompletedTodoList(sortedCompletedTodos);
+       setTodosByCategory(categorizedTodos);
+       setIsLoading(false);
+
     } catch (error) {
       console.error('Error fetching data:', error.message);
     }
@@ -42,10 +92,12 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
 
   useEffect(() => {
     fetchData();
-  }, [sortDirection, sortField]);
+  }, [sortDirection, sortField, selectedCategory]);
 
   const addTodo = (newTodo) => {
     setTodoList((prevTodoList) => [...prevTodoList, newTodo]);
+    // update the todo list after adding a todo, re-fetch the data
+    fetchData(); 
   };
 
   const removeTodo = async (id) => {
@@ -64,6 +116,9 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
+
+    // update the todo list after removing a todo, re-fetch the data
+      fetchData(); 
 
       const data = await response.json();
       const newTodoList = todoList.filter((todo) => todo.id !== data.id);
@@ -105,6 +160,52 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
     }
   };
 
+// Function to toggle status between Active and Completed
+const toggleStatus = async (id, currentStatus) => {
+  const newStatus = currentStatus ? false : true;  // Toggle checkbox value (true <=> false)
+  const editedUrl = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}/${id}`;
+
+  const options = {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`,
+    },
+    body: JSON.stringify({
+      fields: {
+        status: newStatus,
+      },
+    }),
+  };
+
+  try {
+    const response = await fetch(editedUrl, options);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    // update the todo list after toggling the status, re-fetch the data
+    fetchData(); 
+
+    const data = await response.json();
+
+    // Update the local state to reflect the status change
+    setTodoList((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === data.id ? { ...todo, status: newStatus } : todo
+      )
+    );
+
+    setCompletedTodoList((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === data.id ? { ...todo, status: newStatus } : todo
+      )
+    );
+  } catch (error) {
+    console.error('Error toggling status:', error);
+  }
+};
+
   // Function to toggle sorting direction
   const toggleSortDirection = () => {
     setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
@@ -131,13 +232,36 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
         </button>
       </div>
 
-      {isLoading ? (
-        <p>Loading...</p>
+    {isLoading ? (
+      <p> Loading...</p>
       ) : (
-        <TodoList todoList={todoList} onRemoveTodo={removeTodo} onEditTodo={editTodo} />
-      )}
+      <>
+        {todosByCategory[selectedCategory].length > 0 && (
+          <>
+            <h2>Active Todo List</h2>
+            <TodoList
+            todoList={todosByCategory[selectedCategory].filter(todo => !todo.status)}
+              onRemoveTodo={removeTodo}
+              onEditTodo={editTodo}
+              onToggleStatus={toggleStatus} 
+            />
+          </>
+        )}
+        {todosByCategory[selectedCategory].length > 0 && (
+          <>
+            <h2>Completed Todo List</h2>
+            <TodoList
+              todoList={todosByCategory[selectedCategory].filter(todo => todo.status)}
+              onRemoveTodo={removeTodo}
+              onEditTodo={editTodo}
+              onToggleStatus={toggleStatus} 
+            />
+          </>
+        )}
+      </>
+    )}
 
-      <AddTodoForm onAddTodo={addTodo} />
+    <AddTodoForm onAddTodo={addTodo} selectedDate={selectedDate} selectedCategory={selectedCategory}/>
     </div>
   );
 };
@@ -147,6 +271,10 @@ TodoContainer.propTypes = {
   sortField: PropTypes.oneOf(['title', 'time']).isRequired,
   setSortDirection: PropTypes.func.isRequired,
   setSortField: PropTypes.func.isRequired,
+  selectedDate: PropTypes.instanceOf(Date).isRequired,
+  selectedCategory: PropTypes.string.isRequired,
 };
 
 export default TodoContainer;
+
+

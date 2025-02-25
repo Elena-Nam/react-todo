@@ -3,7 +3,7 @@ import InputWithLabel from '../InputWithLabel';
 import PropTypes from 'prop-types';
 import styles from './AddTodoForm.module.css'; 
 
-function AddTodoForm ({onAddTodo}) {
+function AddTodoForm ({onAddTodo, selectedDate, selectedCategory}) {
   const [todoTitle, setTodoTitle] = useState ('');
   const [isSubmitting, setIsSubmitting] = useState(false); // New state for handling the button disable/enable
     
@@ -22,8 +22,11 @@ function AddTodoForm ({onAddTodo}) {
 	  const newTodo = {
       fields: {
       title: todoTitle, // Pass the title from the state
-        },
+      createdAt: selectedDate.toISOString(),
+      category: selectedCategory,
+      },
 	  };
+    console.log(newTodo);
 	  try {
       const response = await fetch (url, {
       method: "POST",
@@ -43,12 +46,15 @@ function AddTodoForm ({onAddTodo}) {
       const addedNewTodo = {
         id: data.id,
         title: data.fields.title,
+        createdAt: data.fields.createdAt,
+        category: data.fields.category, 
       };
   
       onAddTodo(addedNewTodo); // Pass the added todo to the parent
 
       setTodoTitle(''); // Clear the input field after adding the todo
-	  
+      
+      	  
     } catch (error) {
       console.error('Error adding todo:', error);
     } finally {
@@ -59,13 +65,13 @@ function AddTodoForm ({onAddTodo}) {
 	 
 return (
     <form className={styles.inputForm} onSubmit = {handleAddTodo}>
-	  <InputWithLabel 
-		todoTitle={todoTitle} 
-		handleTitleChange={handleTitleChange}> Title
-	  </InputWithLabel>
+      <InputWithLabel 
+        todoTitle={todoTitle} 
+        handleTitleChange={handleTitleChange}> Title
+      </InputWithLabel>
     
-    <button type="submit" disabled={isSubmitting} className = "button"> 
-        {isSubmitting ? 'Adding...' : 'Submit'} {/* Change the button text when submitting */}
+      <button type="submit" disabled={isSubmitting} className = "button"> 
+          {isSubmitting ? 'Adding...' : 'Submit'} {/* Change the button text when submitting */}
       </button>
     </form>
 )
@@ -73,7 +79,9 @@ return (
 
 
 AddTodoForm.propTypes = {
-  onAddTodo: PropTypes.func.isRequired
+  onAddTodo: PropTypes.func.isRequired,
+  selectedDate: PropTypes.instanceOf(Date).isRequired,
+  selectedCategory: PropTypes.string.isRequired,
 }
 
 export default AddTodoForm;

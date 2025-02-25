@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+ /* background-color: #242424;*/
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,6 +39,7 @@ h1 {
 }
 
 /* styles for the calendar*/
+
 button {
   border-radius: 8px;
   border: 2px solid transparent;
@@ -46,7 +47,7 @@ button {
   font-size: 1em;
   font-weight: 600;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #f9f9f9;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -59,13 +60,22 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  button {
-   background-color: #f9f9f9;
-  }
+.react-calendar__tile--active {
+  background-color: #6B8E23; 
 }
+
+
+@media (max-width: 1080px) {
+  :root {
+    background-color: rgb(106, 169, 26);
+  }
+  button { /* styles for the calendar*/
+  padding: 0.5em 0.5em;
+  font-size: 0.8em;
+  }
+  
+
+
+
+}
+
