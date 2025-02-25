@@ -1,0 +1,26 @@
+.Layout, .categoryButtons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.2rem;
+   }
+   
+   .linkButton {
+    background: none;  
+    border: none; 
+    text-decoration: underline;  
+    padding: 10px; 
+  }
+
+  .active {
+    background-color: #6B8E23;
+    font-weight: bold; 
+    text-decoration: none;  
+  }
+    @media (max-width: 768px) {
+      .categoryButtons{
+        font-size: 1.5rem;
+      }
+    }
+  
+  
