@@ -10,9 +10,6 @@ const Home = () => {
   
     return (
       <div className = {styles.Home}>
-         <div className= {styles.image}>
-          {/*<img src="/images/spring-846051_640.jpg" alt="home page" />*/}
-        </div>
         <button type = "submit" className={styles.button} onClick={onChangePage}> Start </button>
       </div>
     )

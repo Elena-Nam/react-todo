@@ -94,12 +94,13 @@ const TodoContainer = ({ sortDirection, sortField, setSortDirection, setSortFiel
     fetchData();
   }, [sortDirection, sortField, selectedCategory]);
 
-  const addTodo = (newTodo) => {
+  const addTodo = async (newTodo) => {
     setTodoList((prevTodoList) => [...prevTodoList, newTodo]);
+  
     // update the todo list after adding a todo, re-fetch the data
     fetchData(); 
   };
-
+     
   const removeTodo = async (id) => {
     const removeUrl = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}/${id}`;
 

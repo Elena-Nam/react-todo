@@ -43,18 +43,17 @@ function AddTodoForm ({onAddTodo, selectedDate, selectedCategory}) {
       const data = await response.json();
 
       // Add the new todo to the parent component
-      const addedNewTodo = {
+        const addedNewTodo = {
         id: data.id,
         title: data.fields.title,
         createdAt: data.fields.createdAt,
         category: data.fields.category, 
       };
-  
+
       onAddTodo(addedNewTodo); // Pass the added todo to the parent
 
       setTodoTitle(''); // Clear the input field after adding the todo
-      
-      	  
+
     } catch (error) {
       console.error('Error adding todo:', error);
     } finally {
